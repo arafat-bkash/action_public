@@ -1,0 +1,29 @@
+name: Terraform Apply
+on:
+  workflow_dispatch:
+    inputs:
+      ENVIRONMENT:
+        description: 'Select Environment'
+        required: true
+        default: 'uat'
+        type: choice
+        options:
+          - uat
+          - lt
+          - prod
+      terraform_apply:
+        description: 'Terraform Apply?'
+        required: true
+        default: false
+        type: boolean
+
+jobs:
+  terraform-apply:
+    runs-on: self-hosted
+    environment: ${{github.event.inputs.ENVIRONMENT}}
+    steps:
+    - name: Terraform Apply
+      if: ${{ github.event.inputs.terraform_apply == 'true' }}
+      run: |
+        echo "Applying Terraform changes..."
+        # terraform apply -input=false myplan
